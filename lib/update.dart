@@ -20,7 +20,7 @@ class _myHomePageState extends State<Update> {
   Future<List<Student>> Studentss;
   TextEditingController controller = TextEditingController();     //CONTROLER PARA CAMPO A ACTUALIZAR
   TextEditingController controller_photo = TextEditingController();
-  
+
   //String photoName;
   String imagen;
 
@@ -30,7 +30,7 @@ class _myHomePageState extends State<Update> {
   String phone;
   String email;
   String matricula;
-  
+
   int currentUserId;
   String valor;
   int opcion;
@@ -70,17 +70,17 @@ class _myHomePageState extends State<Update> {
       imagen = imgString;
       Navigator.of(context).pop();
       controller_photo.text = "Campo lleno";
-      return imagen; 
+      return imagen;
     });
   }
 
   pickImagefromCamera(BuildContext context) {
     ImagePicker.pickImage(source: ImageSource.camera).then((imgFile) {
       String imgString = Convertir.base64String(imgFile.readAsBytesSync());
-        imagen = imgString;
-        Navigator.of(context).pop();
-        controller_photo.text = "Campo lleno";
-        return imagen; 
+      imagen = imgString;
+      Navigator.of(context).pop();
+      controller_photo.text = "Campo lleno";
+      return imagen;
     });
   }
 
@@ -90,29 +90,29 @@ class _myHomePageState extends State<Update> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Choose an option:", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+              title: Text("Choose an option:", textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
               backgroundColor: Colors.grey[300],
               content: SingleChildScrollView(
-            child: ListBody(children: <Widget>[
-              GestureDetector(
-                child: Text("1. Gallery",
-                style: TextStyle(color: Colors.black),),
-                onTap: () {
-                  pickImagefromGallery(context);
-                },
-              ),
-              Padding(padding: EdgeInsets.all(10.0),),
-              GestureDetector(
-                child: Text("2. Camera",
-                style: TextStyle(color: Colors.black),),
-                onTap: () {
-                  pickImagefromCamera(context);
-                },
-              )
-            ]),
-          ));
+                child: ListBody(children: <Widget>[
+                  GestureDetector(
+                    child: Text("1. Gallery",
+                      style: TextStyle(color: Colors.black),),
+                    onTap: () {
+                      pickImagefromGallery(context);
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.all(10.0),),
+                  GestureDetector(
+                    child: Text("2. Camera",
+                      style: TextStyle(color: Colors.black),),
+                    onTap: () {
+                      pickImagefromCamera(context);
+                    },
+                  )
+                ]),
+              ));
         });
-      }
+  }
   void updateData(){
     print("Valor de Opción");
     print(opcion);
@@ -156,7 +156,7 @@ class _myHomePageState extends State<Update> {
       refreshList();
     }
   }
-  
+
   //Formulario
   Widget form() {
     return Form(
@@ -170,14 +170,11 @@ class _myHomePageState extends State<Update> {
           children: <Widget>[
             new SizedBox(height: 50.0),
             TextFormField(
-              enabled: true,
               controller: change ? controller : controller_photo,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(labelText: descriptive_text),
-              validator: (val) => val.length == 0 
-                  ? "Ingrese una imagen por favor" 
-                  : controller_photo.text == "Campo lleno" 
-                  ? null : "Solo imagenes",
+              validator: (val) => change == false ? val.length == 0 ? 'Enter Data' : controller_photo.text != "Campo lleno"
+                  ? "Solo se puede imagenes" : null : val.length == 0 ? 'Enter Data' : null,
               onSaved: (val) => change ? valor = controller.text : valor = imagen,
             ),
             SizedBox(height: 30,),
@@ -367,23 +364,23 @@ class _myHomePageState extends State<Update> {
               }),
               //FOTOGRAFIA
               DataCell(Convertir.imageFromBase64sString(student.photoName), onTap: () {
-              setState(() {
-                isUpdating = true;
-                change = false;
-                descriptive_text = "Imagen";
-                currentUserId = student.controlnum;
-                name = student.name;
-                lastname1 = student.lastname1;
-                lastname2 = student.lastname2;
-                phone = student.phone;
-                email = student.email;
-                matricula = student.matricula;
-                imagen = student.photoName;
-                opcion=7;
-              });
-              _seleccionar();
-              controller_photo.text = "Archivo Imagen Estudiante";
-            }),
+                setState(() {
+                  isUpdating = true;
+                  change = false;
+                  descriptive_text = "Imagen";
+                  currentUserId = student.controlnum;
+                  name = student.name;
+                  lastname1 = student.lastname1;
+                  lastname2 = student.lastname2;
+                  phone = student.phone;
+                  email = student.email;
+                  matricula = student.matricula;
+                  imagen = student.photoName;
+                  opcion=7;
+                });
+                _seleccionar();
+                controller_photo.text = "Campo lleno";
+              }),
             ])).toList(),
       ),
     );
